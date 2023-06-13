@@ -1,4 +1,7 @@
+import React from "react";
 const ListItem = ({ item, todoData, setTodoData }) => {
+    console.log("ListItem 랜더링", item);
+
     const btnStyle = {
         background: "#e1e1e1",
         color: "#fff",
@@ -35,23 +38,23 @@ const ListItem = ({ item, todoData, setTodoData }) => {
             return item;
         });
         setTodoData(newTodoData);
-    }
-        return (
-            <div style={getStyle(item.completed)} key={item.id}>
-                {/* key는 반복문에서 unique해야한다 */}
-                {/* defaultChecke체크박스에 기본체크 상태 설정 */}
-                <input
-                    type="checkbox"
-                    defaultChecked={item.completed}
-                    onChange={() => handleCompleteChange(item.id)}
-                />
-                {item.title}
-
-                {/* 화살표함수로 감싸서 즉시실행이 아닌, 클릭시 실행하게 만들자 */}
-                <button style={btnStyle} onClick={() => handleClick(item.id)}>
-                    X
-                </button>
-            </div>
-        );
     };
+    return (
+        <div style={getStyle(item.completed)} key={item.id}>
+            {/* key는 반복문에서 unique해야한다 */}
+            {/* defaultChecke체크박스에 기본체크 상태 설정 */}
+            <input
+                type="checkbox"
+                defaultChecked={item.completed}
+                onChange={() => handleCompleteChange(item.id)}
+            />
+            {item.title}
+
+            {/* 화살표함수로 감싸서 즉시실행이 아닌, 클릭시 실행하게 만들자 */}
+            <button style={btnStyle} onClick={() => handleClick(item.id)}>
+                X
+            </button>
+        </div>
+    );
+};
 export default ListItem;

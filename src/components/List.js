@@ -1,6 +1,9 @@
 import ListItem from "./ListItem";
+import React from "react";
 
 const List = ({ todoData, setTodoData }) => {
+    console.log("List 랜더링");
+
     return (
         <div>
             {/* 할일메인 */}
@@ -15,4 +18,4 @@ const List = ({ todoData, setTodoData }) => {
         </div>
     );
 };
-export default List;
+export default React.memo(List);
