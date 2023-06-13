@@ -8,6 +8,7 @@ const List = ({ todoData, setTodoData }) => {
         <div>
             {/* 할일메인 */}
             {todoData.map(item => (
+                // 여기에 있는 key값은, .map을 위한 key
                 <ListItem
                     key={item.id}
                     item={item}
@@ -18,4 +19,4 @@ const List = ({ todoData, setTodoData }) => {
         </div>
     );
 };
-export default React.memo(List);
+export default List;

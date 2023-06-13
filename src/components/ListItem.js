@@ -40,7 +40,7 @@ const ListItem = ({ item, todoData, setTodoData }) => {
         setTodoData(newTodoData);
     };
     return (
-        <div style={getStyle(item.completed)} key={item.id}>
+        <div style={getStyle(item.completed)}>
             {/* key는 반복문에서 unique해야한다 */}
             {/* defaultChecke체크박스에 기본체크 상태 설정 */}
             <input
