@@ -1,16 +1,14 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
+
+import React, { useState } from "react";
+
 const ListItem = ({ item, todoData, setTodoData }) => {
     console.log("ListItem 랜더링", item);
 
-    const btnStyle = {
-        background: "#e1e1e1",
-        color: "#fff",
-        float: "right",
-        border: "none",
-        padding: "5px 9px",
-        borderRadius: "50%",
-        cursor: "pointer",
-    };
+    // 편집상태 설정 state
+    const [isEdit, setIsEdit] = useState(false);
+
+    const [editTitle, setEditTitle] = useState(item.title);
 
     const getStyle = _completed => {
         return {
@@ -19,13 +17,45 @@ const ListItem = ({ item, todoData, setTodoData }) => {
             textDecoration: _completed ? "line-through" : "none",
         };
     };
-    const handleClick = _id => {
+    // 삭제창 만들기
+    const handleDeleteClick = _id => {
         // 전달된 id를 검색해서 목록에서 제거
         // 1.전달된 id로 해당하는 목록을 찾아서 제외하고 새로운 목록으로 갱신(화면 리랜더링)
         // 2.배열의 고차함수 중 filter를 사용하자(결과가 참인 값만 담아서 새로운 배열은 만든다.)
         const newTodoData = todoData.filter(item => item.id !== _id);
         setTodoData(newTodoData);
     };
+
+    // 수정버튼 활성화 하기
+    const handleEditClick = _id => {
+        console.log(_id);
+        setIsEdit(true);
+    };
+
+    //수정 입력창 생성하기
+    const handleEditChange = e => {
+        setEditTitle(e.target.value);
+    };
+
+    // 수정 취소하기
+    const handleCancelClick = () => {
+        setIsEdit(false);
+    };
+
+    // 수정 저장하기
+    const handleSaveClick = _id => {
+        console.log(_id);
+        let newTodoData = todoData.map(item => {
+            if (item.id === _id) {
+                item.title = editTitle;
+            }
+            return item;
+        });
+        setTodoData(newTodoData)
+        setIsEdit(false);
+    };
+
+    //completed:true/false 수정하기
     const handleCompleteChange = _id => {
         // 중요한 것은 id에 해당하는 것만 수정하면 되는것이 아니다
         // state는 항상 새롭게 만든 내용. 즉, 배열로 업데이트 해야한다.
@@ -39,27 +69,68 @@ const ListItem = ({ item, todoData, setTodoData }) => {
         });
         setTodoData(newTodoData);
     };
-    return (
-        <div className="flex items-center justify-between w-full mb-3 px-4 py-1 text-gray-600 bg-gray-100 border rounded">
-            <div className="items-center" style={getStyle(item.completed)}>
-                {/* key는 반복문에서 unique해야한다 */}
-                {/* defaultChecke체크박스에 기본체크 상태 설정 */}
-                <input
-                    type="checkbox"
-                    defaultChecked={item.completed}
-                    onChange={() => handleCompleteChange(item.id)}
-                />
 
-                {item.title}
+    if (isEdit) {
+        // 편집중
+        return (
+            <div className="flex items-center justify-between w-full mb-3 px-4 py-1 text-gray-500 bg-gray-100 border rounded">
+                <div className="items-center w-4/6">
+                    <input
+                        type="text"
+                        value={editTitle}
+                        onChange={handleEditChange}
+                        className="w-full px-3 py-2 mr-3 text-gray-500 rounded"
+                    />
+                </div>
+                <div className="items-center">
+                    {/* 화살표함수로 감싸서 즉시실행이 아닌, 클릭시 실행하게 만들자 */}
+                    <button
+                        className="px-y py-2 float-right px-1"
+                        onClick={handleCancelClick}
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        className="px-y py-2 float-right px-1"
+                        onClick={() => handleSaveClick(item.id)}
+                    >
+                        Save
+                    </button>
+                </div>
             </div>
-            <div className="items-center">
-                {/* 화살표함수로 감싸서 즉시실행이 아닌, 클릭시 실행하게 만들자 */}
-                <button style={btnStyle} onClick={() => handleClick(item.id)}>
-                    X
-                </button>
+        );
+    } else {
+        // 일반상태(평소의 상태)
+        return (
+            <div className="flex items-center justify-between w-full mb-3 px-4 py-1 text-gray-600 bg-gray-100 border rounded">
+                <div className="items-center" style={getStyle(item.completed)}>
+                    {/* key는 반복문에서 unique해야한다 */}
+                    {/* defaultChecke체크박스에 기본체크 상태 설정 */}
+                    <input
+                        type="checkbox"
+                        defaultChecked={item.completed}
+                        onChange={() => handleCompleteChange(item.id)}
+                    />
+                    <span className="ml-2">{item.title}</span>
+                </div>
+                <div className="items-center">
+                    {/* 화살표함수로 감싸서 즉시실행이 아닌, 클릭시 실행하게 만들자 */}
+                    <button
+                        className="px-y py-2 float-right px-1"
+                        onClick={() => handleDeleteClick(item.id)}
+                    >
+                        Del
+                    </button>
+                    <button
+                        className="px-y py-2 float-right px-1"
+                        onClick={handleEditClick}
+                    >
+                        Edit
+                    </button>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 };
 
 // 리랜더링 최적화를 위한 코드(React.memo)

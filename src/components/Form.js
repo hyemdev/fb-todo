@@ -36,8 +36,7 @@ const Form = ({ todoData, setTodoData }) => {
                 className="flex pt-2"
                 style={{
                     display: "flex",
-                    marginTop: "5px",
-                    padding: "1px 10px",
+                    marginTop: "5px"
                 }}
                 onSubmit={handleSubmit}
             >
