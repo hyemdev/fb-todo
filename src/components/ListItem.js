@@ -11,10 +11,10 @@ const ListItem = ({ item, todoData, setTodoData }) => {
         borderRadius: "50%",
         cursor: "pointer",
     };
+
     const getStyle = _completed => {
         return {
             padding: "10px",
-            borderBottom: "1px solid lavender",
             // 할일을 완료했으면 텍스트에 중간선, 완료하지못했으면 아무것도 표기를 안한다.
             textDecoration: _completed ? "line-through" : "none",
         };
@@ -40,21 +40,27 @@ const ListItem = ({ item, todoData, setTodoData }) => {
         setTodoData(newTodoData);
     };
     return (
-        <div style={getStyle(item.completed)}>
-            {/* key는 반복문에서 unique해야한다 */}
-            {/* defaultChecke체크박스에 기본체크 상태 설정 */}
-            <input
-                type="checkbox"
-                defaultChecked={item.completed}
-                onChange={() => handleCompleteChange(item.id)}
-            />
-            {item.title}
+        <div className="flex items-center justify-between w-full mb-3 px-4 py-1 text-gray-600 bg-gray-100 border rounded">
+            <div className="items-center" style={getStyle(item.completed)}>
+                {/* key는 반복문에서 unique해야한다 */}
+                {/* defaultChecke체크박스에 기본체크 상태 설정 */}
+                <input
+                    type="checkbox"
+                    defaultChecked={item.completed}
+                    onChange={() => handleCompleteChange(item.id)}
+                />
 
-            {/* 화살표함수로 감싸서 즉시실행이 아닌, 클릭시 실행하게 만들자 */}
-            <button style={btnStyle} onClick={() => handleClick(item.id)}>
-                X
-            </button>
+                {item.title}
+            </div>
+            <div className="items-center">
+                {/* 화살표함수로 감싸서 즉시실행이 아닌, 클릭시 실행하게 만들자 */}
+                <button style={btnStyle} onClick={() => handleClick(item.id)}>
+                    X
+                </button>
+            </div>
         </div>
     );
 };
-export default ListItem;
+
+// 리랜더링 최적화를 위한 코드(React.memo)
+export default React.memo(ListItem);

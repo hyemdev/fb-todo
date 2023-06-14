@@ -19,4 +19,5 @@ const List = ({ todoData, setTodoData }) => {
         </div>
     );
 };
-export default List;
+// 리랜더링 최적화를 위한 코드(React.memo)
+export default React.memo(List);
