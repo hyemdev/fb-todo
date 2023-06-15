@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import React, { useState } from "react";
 
 const ListItem = ({ item, todoData, setTodoData }) => {
@@ -24,6 +22,10 @@ const ListItem = ({ item, todoData, setTodoData }) => {
         // 2.배열의 고차함수 중 filter를 사용하자(결과가 참인 값만 담아서 새로운 배열은 만든다.)
         const newTodoData = todoData.filter(item => item.id !== _id);
         setTodoData(newTodoData);
+        //로컬 스토리지 저장
+        localStorage.setItem("fbTodoData", JSON.stringify(newTodoData));
+
+         //axios delete 호출 fbtodolist 자료삭제하기
     };
 
     // 수정버튼 활성화 하기
@@ -51,7 +53,13 @@ const ListItem = ({ item, todoData, setTodoData }) => {
             }
             return item;
         });
-        setTodoData(newTodoData)
+        setTodoData(newTodoData);
+
+        //로컬 스토리지 저장
+        localStorage.setItem("fbTodoData", JSON.stringify(newTodoData));
+        
+        //axios patch/put 호출 fbtodolist 자료수정하기
+
         setIsEdit(false);
     };
 
@@ -68,6 +76,12 @@ const ListItem = ({ item, todoData, setTodoData }) => {
             return item;
         });
         setTodoData(newTodoData);
+
+        //로컬 스토리지 저장
+        localStorage.setItem("fbTodoData", JSON.stringify(newTodoData));
+
+        //axios patch/put 호출 fbtodolist 자료수정하기
+        
     };
 
     if (isEdit) {
@@ -77,7 +91,7 @@ const ListItem = ({ item, todoData, setTodoData }) => {
                 <div className="items-center w-4/6">
                     <input
                         type="text"
-                        value={editTitle}
+                        defaultValue={editTitle}
                         onChange={handleEditChange}
                         className="w-full px-3 py-2 mr-3 text-gray-500 rounded"
                     />
