@@ -93,6 +93,8 @@ const MyPage = ({
     return (
         <div className="p-6 mt-5 shadow-sm rounded-lg bg-slate-50">
             <h2>MY PAGE</h2>
+
+            
             {/* 1. emotion을 이용하여 tag의 용도를 구분한다
           2. css도 함께 적용한다. */}
             <MyPageDiv>

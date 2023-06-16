@@ -1,22 +1,19 @@
 import { useState } from "react";
-import { LoginDiv } from "../style/UserCss";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import firebase from "../firebase";
+import { Button, Checkbox, Form, Input, Modal } from "antd";
 
-const Login = ({setFBEmail, setFBName, setFBUid}) => {
+const Login = ({ setFBEmail, setFBName, setFBUid }) => {
     // 주소이동 시, Link, NavLink 말고 useNavigate를 이용해보자
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    //로그인
-    const handleLogin = async e => {
-        e.preventDefault();
-        //firebase 로그인 시도
+    const onFinish = async values => {
+        console.log("Success:", values);
         try {
             // email과 pw로 인증 로그인
-            await firebase.auth().signInWithEmailAndPassword(email, password);
+            await firebase
+                .auth()
+                .signInWithEmailAndPassword(values.email, values.password);
 
             //로그인 된 사용자 정보를 가지고 오자
             const user = firebase.auth().currentUser;
@@ -30,76 +27,142 @@ const Login = ({setFBEmail, setFBName, setFBUid}) => {
         } catch (error) {
             console.log("로그인실패", error.code);
             // 에러에 대한 경고창을 띄운다
+
             if (error.code === "auth/invalid-email") {
-                alert("올바른 이메일 형식이 아닙니다.");
+                setModalMessage("올바른 이메일 형식이 아닙니다.");
             } else if (error.code === "auth/wrong-password") {
-                alert("올바르지 않은 비밀번호입니다.");
+                setModalMessage("올바르지 않은 비밀번호입니다.");
             } else if (error.code === "auth/user-not-found") {
-                alert("가입되지 않은 사용자 입니다.");
+                setModalMessage("가입되지 않은 사용자 입니다.");
             } else if (error.code === "auth/missing-email") {
-                alert("이메일이 입력되지 않았습니다.");
+                setModalMessage("이메일이 입력되지 않았습니다.");
             } else {
-                alert("로그인이 실패하였습니다.");
+                setModalMessage("로그인이 실패하였습니다.");
             }
+            showModal();
         }
     };
+    const onFinishFailed = errorInfo => {
+        console.log("Failed:", errorInfo);
+    };
+
+    // AntDesign 모달
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+
+    const showModal = () => setIsModalOpen(true);
+    const handleOk = () => setIsModalOpen(false);
+    const handleCancel = () => setIsModalOpen(false);
+
     return (
         <div className="p-6 mt-5 shadow-sm rounded-lg bg-slate-50">
             <h2>LOGIN</h2>
+
+            {/* Ant Design 모달 */}
+            <Modal
+                title="Basic Modal"
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <p>{modalMessage}</p>
+            </Modal>
+            {/* Ant Design */}
+            <Form
+                name="basic"
+                labelCol={{
+                    span: 3,
+                }}
+                wrapperCol={{
+                    span: 16,
+                }}
+                style={{
+                    maxWidth: 1280,
+                    margin: "0 auto",
+                }}
+                initialValues={{
+                    remember: false,
+                }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+            >
+                <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                        {
+                            type: "email",
+                            // 입력필수사항
+                            required: true,
+                            message: "Please input your Email!",
+                        },
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Please input your password!",
+                            validator: async (_, password) => {
+                                if (!password || password.length < 6) {
+                                    return Promise.reject(
+                                        new Error("6자이상 입력 해주세요"),
+                                    );
+                                }
+                            },
+                        },
+                    ]}
+                >
+                    <Input.Password maxLength={16} minLength={6} />
+                </Form.Item>
+
+                <Form.Item
+                    name="remember"
+                    valuePropName="checked"
+                    wrapperCol={{
+                        offset: 6,
+                        span: 16,
+                    }}
+                >
+                    <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+
+                <Form.Item
+                    wrapperCol={{
+                        offset: 6,
+                        span: 16,
+                    }}
+                >
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ backgroundColor: "#1677ff" }}
+                    >
+                        로그인
+                    </Button>
+                    <Button
+                        htmlType="button"
+                        style={{
+                            margin: "0 10px",
+                            backgroundColor: "#FFF",
+                        }}
+                        onClick={e => {
+                            e.preventDefault();
+                            navigate("/signup");
+                        }}
+                    >
+                        회원가입
+                    </Button>
+                </Form.Item>
+            </Form>
             {/* 1. emotion을 이용하여 tag의 용도를 구분한다
         2. css도 함께 적용한다. */}
-            <LoginDiv>
-                <form>
-                    <label htmlFor="">이메일</label>
-                    {/* required : 반드시 필요하다!는 항목을 지정함 */}
-                    {/* useState 사용할 것 */}
-                    <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
-                    <label htmlFor="">비밀번호</label>
-                    <input
-                        type="password"
-                        required
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        minLength={6}
-                        maxLength={16}
-                    />
-                    <div className="btn-list">
-                        <button
-                            className="border rounded-md px-3 py-2 shadow"
-                            onClick={e => handleLogin(e)}
-                        >
-                            로그인
-                        </button>
-                        {/* 버튼tag가 div안의 button tag와, form안의 button tag의 기능이 다름. 
-                        form안의 button은 submit 기능이 포함되어있음.(클릭 시 브라우저갱신이 발생됨)
-                        그러므로 e.preventDefault를 넣어주자*/}
-                        <button
-                            className="border rounded-md px-7 py-2 shadow"
-                            onClick={e => {
-                                e.preventDefault();
-                                navigate("/signup");
-                            }}
-                        >
-                            회원가입
-                        </button>
-                        <button
-                            className="border rounded-md px-7 py-2 shadow"
-                            onClick={e => {
-                                e.preventDefault();
-                                console.log("비밀번호 찾기");
-                                navigate("/");
-                            }}
-                        >
-                            비밀번호 찾기
-                        </button>
-                    </div>
-                </form>
-            </LoginDiv>
         </div>
     );
 };
