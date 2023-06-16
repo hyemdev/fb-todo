@@ -18,12 +18,25 @@ const SignUp = () => {
                 .auth()
                 .createUserWithEmailAndPassword(email, pw);
 
+            // 회원가입 성공 시, 사용자 이름을 업데이트 하기
             await createUser.user.updateProfile({
-                name: nickName,
+                displayName: nickName,
             });
+            // 로그인 창으로 이동
+            navigate("/login");
             console.log("등록된 정보", createUser.user);
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            // 회원가입시 에러처리
+            console.log(error.errCode);
+            if (error.code == "auth/email-already-in-use") {
+                alert("The email address is already in use");
+            } else if (error.code == "auth/invalid-email") {
+                alert("The email address is not valid.");
+            } else if (error.code == "auth/operation-not-allowed") {
+                alert("Operation not allowed.");
+            } else if (error.code == "auth/weak-password") {
+                alert("The password is too weak.");
+            }
         }
     };
     return (
@@ -55,7 +68,7 @@ const SignUp = () => {
                         required
                         value={pw}
                         onChange={e => setPW(e.target.value)}
-                        minLength={8}
+                        minLength={6}
                         maxLength={16}
                     />
                     <label htmlFor="">비밀번호확인</label>
@@ -64,7 +77,7 @@ const SignUp = () => {
                         required
                         value={pwConfirm}
                         onChange={e => setPwConfirm(e.target.value)}
-                        minLength={8}
+                        minLength={6}
                         maxLength={16}
                     />
                     <div className="btn-list">

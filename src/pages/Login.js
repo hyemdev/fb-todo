@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { LoginDiv } from "../style/UserCss";
 import { useNavigate } from "react-router";
+import firebase from "../firebase";
 
-const Login = () => {
+const Login = ({setFBEmail, setFBName, setFBUid}) => {
     // 주소이동 시, Link, NavLink 말고 useNavigate를 이용해보자
     const navigate = useNavigate();
 
@@ -10,9 +11,37 @@ const Login = () => {
     const [password, setPassword] = useState("");
 
     //로그인
-    const handleLogin = e => {
-        console.log(e.target);
+    const handleLogin = async e => {
+        e.preventDefault();
         //firebase 로그인 시도
+        try {
+            // email과 pw로 인증 로그인
+            await firebase.auth().signInWithEmailAndPassword(email, password);
+
+            //로그인 된 사용자 정보를 가지고 오자
+            const user = firebase.auth().currentUser;
+            console.log("로그인성공");
+            console.log(user);
+            setFBName(user.displayName);
+            setFBEmail(user.email);
+            setFBUid(user.uid);
+
+            navigate("/todo");
+        } catch (error) {
+            console.log("로그인실패", error.code);
+            // 에러에 대한 경고창을 띄운다
+            if (error.code === "auth/invalid-email") {
+                alert("올바른 이메일 형식이 아닙니다.");
+            } else if (error.code === "auth/wrong-password") {
+                alert("올바르지 않은 비밀번호입니다.");
+            } else if (error.code === "auth/user-not-found") {
+                alert("가입되지 않은 사용자 입니다.");
+            } else if (error.code === "auth/missing-email") {
+                alert("이메일이 입력되지 않았습니다.");
+            } else {
+                alert("로그인이 실패하였습니다.");
+            }
+        }
     };
     return (
         <div className="p-6 mt-5 shadow-sm rounded-lg bg-slate-50">
@@ -36,7 +65,7 @@ const Login = () => {
                         required
                         value={password}
                         onChange={e => setPassword(e.target.value)}
-                        minLength={8}
+                        minLength={6}
                         maxLength={16}
                     />
                     <div className="btn-list">
@@ -62,7 +91,7 @@ const Login = () => {
                             className="border rounded-md px-7 py-2 shadow"
                             onClick={e => {
                                 e.preventDefault();
-                                console.log("비밀번호 찾기")
+                                console.log("비밀번호 찾기");
                                 navigate("/");
                             }}
                         >

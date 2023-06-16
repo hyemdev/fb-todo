@@ -2,8 +2,15 @@ import { useEffect, useState } from "react";
 
 import List from "../components/List";
 import Form from "../components/Form";
+import { useNavigate } from "react-router-dom";
 
-const Todo = () => {
+const Todo = ({ fbName, fbUid, fbEmail }) => {
+    // 나중에 db구성에 활용한다
+    // Firebase, MongDB에서는 Collection 구성에 활용한다.
+    console.log(fbName, fbEmail);
+
+    const Navigator = useNavigate();
+
     // 로컬 데이터 state 변수
     const initTodoData = localStorage.getItem("fbTodoData")
         ? JSON.parse(localStorage.getItem("fbTodoData"))
@@ -17,10 +24,15 @@ const Todo = () => {
         localStorage.setItem("fbTodoData", JSON.stringify([]));
     };
 
-    useEffect (()=>{
-      //axios get호출 fbtodolist 자료 받기
+    //uid없는 경우 로그인으로 바로 보내기
+    useEffect(() => {
+        if (!fbUid) {
+            Navigator("/login");
+        }
+    }, []);
 
-    },[])
+    //axios get호출 fbtodolist 자료 받기
+    useEffect(() => {}, []);
     return (
         <div>
             <div className="flex justify-center items-start mt-5 w-full">
