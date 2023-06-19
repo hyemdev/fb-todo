@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { patchTitleTodo, patchCompleteTodo, deleteTodo } from "../axios/axios";
 
 const ListItem = ({ item, todoData, setTodoData }) => {
     console.log("ListItem 랜더링", item);
@@ -22,11 +23,13 @@ const ListItem = ({ item, todoData, setTodoData }) => {
         // 2.배열의 고차함수 중 filter를 사용하자(결과가 참인 값만 담아서 새로운 배열은 만든다.)
         const newTodoData = todoData.filter(item => item.id !== _id);
         setTodoData(newTodoData);
-        //로컬 스토리지 저장
-        localStorage.setItem("fbTodoData", JSON.stringify(newTodoData));
 
-         //axios delete 호출 fbtodolist 자료삭제하기
+        //로컬 스토리지 저장
+        // localStorage.setItem("fbTodoData", JSON.stringify(newTodoData));
+
+        deleteTodo(_id);
     };
+    //async,await & axios 사용하기
 
     // 수정버튼 활성화 하기
     const handleEditClick = _id => {
@@ -50,16 +53,16 @@ const ListItem = ({ item, todoData, setTodoData }) => {
         let newTodoData = todoData.map(item => {
             if (item.id === _id) {
                 item.title = editTitle;
+                item.completed = false;
             }
             return item;
         });
         setTodoData(newTodoData);
 
-        //로컬 스토리지 저장
-        localStorage.setItem("fbTodoData", JSON.stringify(newTodoData));
-        
         //axios patch/put 호출 fbtodolist 자료수정하기
+        console.log(_id, editTitle);
 
+        patchTitleTodo(_id, editTitle);
         setIsEdit(false);
     };
 
@@ -78,10 +81,10 @@ const ListItem = ({ item, todoData, setTodoData }) => {
         setTodoData(newTodoData);
 
         //로컬 스토리지 저장
-        localStorage.setItem("fbTodoData", JSON.stringify(newTodoData));
+        // localStorage.setItem("fbTodoData", JSON.stringify(newTodoData));
 
         //axios patch/put 호출 fbtodolist 자료수정하기
-        
+        patchCompleteTodo(_id, { ...item });
     };
 
     if (isEdit) {
@@ -123,6 +126,7 @@ const ListItem = ({ item, todoData, setTodoData }) => {
                     <input
                         type="checkbox"
                         defaultChecked={item.completed}
+                        value={item.completed}
                         onChange={() => handleCompleteChange(item.id)}
                     />
                     <span className="ml-2">{item.title}</span>
