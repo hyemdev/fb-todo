@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 });
 
 // Todo Get 기능
-const getTodo = async setTodoData => {
+const getTodo = async (setTodoData, Loading) => {
     try {
         const res = await axiosInstance.get("/todos");
         const result = res.data;
@@ -28,8 +28,10 @@ const getTodo = async setTodoData => {
             // item.id = JSON.parse(item.id);
         });
         setTodoData(todosArr);
+        Loading(false)
     } catch (error) {
         console.log(error);
+        Loading(false)
     }
 };
 // Todo Post 기능

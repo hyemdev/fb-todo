@@ -50,6 +50,22 @@ const Header = ({
                             Todo
                         </Link>
                     </li>
+                    <li>
+                        <Link
+                            to="/schedule"
+                            className="text-white hover:text-yellow-500"
+                        >
+                            Schedule
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/upload"
+                            className="text-white hover:text-yellow-500"
+                        >
+                            upload
+                        </Link>
+                    </li>
                 </ul>
                 <div className="flex justify-center gap-5">
                     {/* 로그인 시 로그아웃 창 , 로그아웃 시 로그인 창 띄우기*/}

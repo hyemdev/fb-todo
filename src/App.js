@@ -12,6 +12,8 @@ import Todo from "./pages/Todo";
 import NotFound from "./pages/NotFound";
 import { useState } from "react";
 import MyPage from "./pages/MyPage";
+import Schedule from "./pages/Schedule";
+import Upload from "./pages/Upload";
 
 function App() {
     // 추후에 Redux/Recoil state로 관리 필요
@@ -56,6 +58,8 @@ function App() {
                             />
                         }
                     />
+                    <Route path="/schedule" element={<Schedule />} />
+                    <Route path="/upload" element={<Upload />} />
                     <Route path="/*" element={<NotFound />} />
                     <Route
                         path="/mypage"
