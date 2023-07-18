@@ -13,70 +13,78 @@ import NotFound from "./pages/NotFound";
 import { useState } from "react";
 import MyPage from "./pages/MyPage";
 import Schedule from "./pages/Schedule";
+import TodoChart from "./pages/TodoChart";
 import Upload from "./pages/Upload";
+import { useAuthContext } from "./hooks/useAuthContext";
 
 function App() {
     // 추후에 Redux/Recoil state로 관리 필요
     const [fbUid, setFBUid] = useState();
     const [fbName, setFBName] = useState();
     const [fbEmail, setFBEmail] = useState();
+    const { isAuthReady, user } = useAuthContext();
     return (
-        <div className="w-screen h-screen overflow-x-hidden bg-yellow-100">
-            <Header
-                fbName={fbName}
-                fbUid={fbUid}
-                fbEmail={fbEmail}
-                setFBName={setFBName}
-                setFBEmail={setFBEmail}
-                setFBUid={setFBUid}
-            />
-            <div className="container mx-auto h-full">
-                <Routes>
-                    {/* navigate를 이용한 강제이동 */}
-                    <Route path="/" element={<Navigate to="/home" />} />
+        <>
+            {isAuthReady ? (
+                <div className="w-screen h-screen overflow-x-hidden bg-yellow-100">
+                    <Header />
+                    <div className="container mx-auto h-full">
+                        <Routes>
+                            {/* navigate를 이용한 강제이동 */}
+                            <Route path="/" element={<Navigate to="/home" />} />
 
-                    <Route path="/home" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route
-                        path="/login"
-                        element={
-                            <Login
-                                setFBUid={setFBUid}
-                                setFBName={setFBName}
-                                setFBEmail={setFBEmail}
+                            <Route path="/home" element={<Home />} />
+                            <Route path="/about" element={<About />} />
+                            <Route
+                                path="/login"
+                                element={
+                                    // 사용자 정보가 있으면 home으로, 없으면 login으로
+                                    user ? <Navigate to="/home" /> : <Login />
+                                }
                             />
-                        }
-                    />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route
-                        path="/todo"
-                        element={
-                            <Todo
-                                fbName={fbName}
-                                fbUid={fbUid}
-                                fbEmail={fbEmail}
+                            <Route path="/signup" element={<SignUp />} />
+                            <Route
+                                path="/todo"
+                                element={
+                                    user ? (
+                                        <Todo
+                                            fbName={fbName}
+                                            fbUid={fbUid}
+                                            fbEmail={fbEmail}
+                                        />
+                                    ) : (
+                                        <Navigate to="/login" />
+                                    )
+                                }
                             />
-                        }
-                    />
-                    <Route path="/schedule" element={<Schedule />} />
-                    <Route path="/upload" element={<Upload />} />
-                    <Route path="/*" element={<NotFound />} />
-                    <Route
-                        path="/mypage"
-                        element={
-                            <MyPage
-                                fbName={fbName}
-                                fbUid={fbUid}
-                                fbEmail={fbEmail}
-                                setFBName={setFBName}
-                                setFBEmail={setFBEmail}
-                                setFBUid={setFBUid}
+                            <Route path="/schedule" element={<Schedule />} />
+                            <Route path="/upload" element={<Upload />} />
+                            <Route path="/todochart" element={<TodoChart />} />
+                            <Route path="/*" element={<NotFound />} />
+                            <Route
+                                path="/mypage"
+                                element={
+                                    user ? (
+                                        <MyPage
+                                            fbName={fbName}
+                                            fbUid={fbUid}
+                                            fbEmail={fbEmail}
+                                            setFBName={setFBName}
+                                            setFBEmail={setFBEmail}
+                                            setFBUid={setFBUid}
+                                        />
+                                    ) : (
+                                        <Navigate to="/login" />
+                                    )
+                                }
                             />
-                        }
-                    />
-                </Routes>
-            </div>
-        </div>
+                        </Routes>
+                    </div>
+                </div>
+            ) : (
+                " Loading ... "
+            )}
+        </>
     );
 }
 

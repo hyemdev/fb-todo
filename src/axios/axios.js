@@ -44,7 +44,7 @@ const postTodo = async newTodo => {
         console.log(error);
     }
 };
-
+/////////////////////////////////////////////////
 // Todo Patch 기능
 const patchTitleTodo = async (_id, editTitle) => {
     try {
@@ -70,7 +70,7 @@ const patchCompleteTodo = async (_id, item) => {
         console.log(error);
     }
 };
-
+///////////////////////////////////////////////////////////////
 // Todo Delete 기능
 const deleteTodo = async _id => {
     try {

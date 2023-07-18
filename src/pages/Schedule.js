@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import Calendar from "react-calendar";
 import { Button, Modal } from "antd";
 import "../style/Calendar.css";
+// import List from "../components/List";
+// import { Form, Route, Routes } from "react-router-dom";
 
-const Schedule = () => {
+const Schedule = ({ fbName, fbUid, fbEmail, todoData, setTodoData }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
         setIsModalOpen(true);
@@ -98,9 +100,9 @@ const Schedule = () => {
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
+                <>
+                untitle
+                </>
             </Modal>
 
             <div>

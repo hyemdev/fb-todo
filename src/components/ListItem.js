@@ -16,6 +16,8 @@ const ListItem = ({ item, todoData, setTodoData }) => {
             textDecoration: _completed ? "line-through" : "none",
         };
     };
+    
+//////////////////////////////////////
     // 삭제창 만들기
     const handleDeleteClick = _id => {
         // 전달된 id를 검색해서 목록에서 제거
@@ -29,11 +31,14 @@ const ListItem = ({ item, todoData, setTodoData }) => {
 
         deleteTodo(_id);
     };
+////////////////////////////////////////////////
+
+
     //async,await & axios 사용하기
 
     // 수정버튼 활성화 하기
     const handleEditClick = _id => {
-        console.log(_id);
+        console.log("_id", _id);
         setIsEdit(true);
     };
 
@@ -46,7 +51,7 @@ const ListItem = ({ item, todoData, setTodoData }) => {
     const handleCancelClick = () => {
         setIsEdit(false);
     };
-
+///////////////////////////////////////////////
     // 수정 저장하기
     const handleSaveClick = _id => {
         console.log(_id);
@@ -65,6 +70,8 @@ const ListItem = ({ item, todoData, setTodoData }) => {
         patchTitleTodo(_id, editTitle);
         setIsEdit(false);
     };
+////////////////////////////////////////////////////
+
 
     //completed:true/false 수정하기
     const handleCompleteChange = _id => {

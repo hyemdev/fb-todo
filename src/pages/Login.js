@@ -1,72 +1,83 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import firebase from "../firebase";
+// import firebase from "../firebase";
 import { Button, Checkbox, Form, Input, Modal } from "antd";
+import { useLogin } from "../hooks/useLogin";
 
-const Login = ({ setFBEmail, setFBName, setFBUid }) => {
+const Login = () => {
+    const { login } = useLogin();
+
     // 주소이동 시, Link, NavLink 말고 useNavigate를 이용해보자
     const navigate = useNavigate();
 
     const onFinish = async values => {
         console.log("Success:", values);
+
         try {
-            // email과 pw로 인증 로그인
-            await firebase
-                .auth()
-                .signInWithEmailAndPassword(values.email, values.password);
-
-            //로그인 된 사용자 정보를 가지고 오자
-            const user = firebase.auth().currentUser;
-            console.log("로그인성공");
-            console.log(user);
-            setFBName(user.displayName);
-            setFBEmail(user.email);
-            setFBUid(user.uid);
-
-            navigate("/todo");
+            await login(values.email, values.password);
+            navigate("/about");
         } catch (error) {
-            console.log("로그인실패", error.code);
-            // 에러에 대한 경고창을 띄운다
-
-            if (error.code === "auth/invalid-email") {
-                setModalMessage("올바른 이메일 형식이 아닙니다.");
-            } else if (error.code === "auth/wrong-password") {
-                setModalMessage("올바르지 않은 비밀번호입니다.");
-            } else if (error.code === "auth/user-not-found") {
-                setModalMessage("가입되지 않은 사용자 입니다.");
-            } else if (error.code === "auth/missing-email") {
-                setModalMessage("이메일이 입력되지 않았습니다.");
-            } else {
-                setModalMessage("로그인이 실패하였습니다.");
-            }
-            showModal();
+            console.log("error", error);
         }
+
+        // try {
+        //     // email과 pw로 인증 로그인
+        //     await firebase
+        //         .auth()
+        //         .signInWithEmailAndPassword(values.email, values.password);
+
+        //     //로그인 된 사용자 정보를 가지고 오자
+        //     const user = firebase.auth().currentUser;
+        //     console.log("로그인성공");
+        //     console.log(user);
+        //     setFBName(user.displayName);
+        //     setFBEmail(user.email);
+        //     setFBUid(user.uid);
+
+        //     navigate("/todo");
+        // } catch (error) {
+        //     console.log("로그인실패", error.code);
+        //     // 에러에 대한 경고창을 띄운다
+
+        //     if (error.code === "auth/invalid-email") {
+        //         setModalMessage("올바른 이메일 형식이 아닙니다.");
+        //     } else if (error.code === "auth/wrong-password") {
+        //         setModalMessage("올바르지 않은 비밀번호입니다.");
+        //     } else if (error.code === "auth/user-not-found") {
+        //         setModalMessage("가입되지 않은 사용자 입니다.");
+        //     } else if (error.code === "auth/missing-email") {
+        //         setModalMessage("이메일이 입력되지 않았습니다.");
+        //     } else {
+        //         setModalMessage("로그인이 실패하였습니다.");
+        //     }
+        //     showModal();
+        // }
     };
     const onFinishFailed = errorInfo => {
         console.log("Failed:", errorInfo);
     };
 
     // AntDesign 모달
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalMessage, setModalMessage] = useState("");
+    // const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [modalMessage, setModalMessage] = useState("");
 
-    const showModal = () => setIsModalOpen(true);
-    const handleOk = () => setIsModalOpen(false);
-    const handleCancel = () => setIsModalOpen(false);
+    // const showModal = () => setIsModalOpen(true);
+    // const handleOk = () => setIsModalOpen(false);
+    // const handleCancel = () => setIsModalOpen(false);
 
     return (
         <div className="p-6 mt-5 shadow-sm rounded-lg bg-slate-50">
             <h2>LOGIN</h2>
 
             {/* Ant Design 모달 */}
-            <Modal
+            {/* <Modal
                 title="Basic Modal"
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
                 <p>{modalMessage}</p>
-            </Modal>
+            </Modal> */}
             {/* Ant Design */}
             <Form
                 name="basic"

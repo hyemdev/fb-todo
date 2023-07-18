@@ -85,9 +85,9 @@ const MyPage = ({
     };
 
     useEffect(() => {
-        if (!fbUid) {
-            navigate("/");
-        }
+        // if (!fbUid) {
+        //     navigate("/");
+        // }
     }, []);
 
     return (
@@ -110,7 +110,7 @@ const MyPage = ({
                             maxLength={10}
                         />
                         <button
-                            className="border rounded-md px-7 py-2 shadow"
+                            className="border rounded-md px-7 py-4 shadow"
                             onClick={handlerNickName}
                         >
                             닉네임 변경
