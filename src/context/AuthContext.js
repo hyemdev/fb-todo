@@ -32,13 +32,17 @@ const authReducer = (state, action) => {
         case "isAuthReady":
             return { ...state, user: action.payload, isAuthReady: true };
 
-        //----마이페이지 수정 업데이트
+        // 마이페이지 수정 업데이트
         case "updateName":
-            return {...state, user: action.payload}
+            return { ...state, user: action.payload };
         case "updateEmail":
-            return {...state, user: action.payload}
+            return { ...state, user: action.payload };
         case "deleteUser":
-            return {...state, user: null}
+            return { ...state, user: null };
+
+        // 에러메시지 띄우기
+        case "isError":
+            return { ...state, errMessage: action.payload };
 
         default:
             // 그대로 돌려준다
@@ -59,8 +63,9 @@ const AuthContextProvider = ({ children }) => {
         user: null, //fb로그인 정보(초기값은 null임)
         // user: {email: "", nickname: "", uid: ""}
 
-        // 로그인 상태체크
-        isAuthReady: false,
+        isAuthReady: false, // 로그인 상태체크
+
+        ErrMessage: "", // 에러메시지
     });
 
     // fb 인증 웹브라우저 새로고침 처리

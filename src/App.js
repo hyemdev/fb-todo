@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import { React, useState } from "react";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -11,19 +11,31 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Todo from "./pages/Todo";
 import NotFound from "./pages/NotFound";
-import { useState } from "react";
 import MyPage from "./pages/MyPage";
 import Schedule from "./pages/Schedule";
 import TodoChart from "./pages/TodoChart";
 import Upload from "./pages/Upload";
+
 import { useAuthContext } from "./hooks/useFirebase";
+import { Button, Modal } from "antd";
 
 function App() {
     // 추후에 Redux/Recoil state로 관리 필요
     const [fbUid, setFBUid] = useState();
     const [fbName, setFBName] = useState();
     const [fbEmail, setFBEmail] = useState();
-    const { isAuthReady, user } = useAuthContext();
+    const { isAuthReady, user, errMessage, dispatch } = useAuthContext();
+
+    //에러메시지 모달 관련
+    const [isModalOpen, setIsModalOpen] = useState(true);
+
+    const handleOk = () => {
+        dispatch({ type: "isError", payload: "" });
+    };
+    // const handleCancel = () => {
+    //     dispatch({ type: "isError", payload: "" });
+    // };
+
     return (
         <>
             {isAuthReady ? (
@@ -81,6 +93,17 @@ function App() {
                             />
                         </Routes>
                     </div>
+                    {/* 모달창 */}
+                    {errMessage && (
+                        <Modal
+                            title="Basic Modal"
+                            open={isModalOpen}
+                            onOk={handleOk}
+                            // onCancel={handleCancel}
+                        >
+                            <p>{errMessage}</p>
+                        </Modal>
+                    )}
                 </div>
             ) : (
                 " Loading ... "

@@ -12,6 +12,7 @@ import {
 import { appAuth } from "../firebase/config";
 // import { useAuthContext } from "./useAuthContext";
 import { useNavigate } from "react-router-dom";
+import { Button, Modal, Space } from "antd";
 
 // auth context hook
 export const useAuthContext = () => {
@@ -41,6 +42,19 @@ export const useLogin = () => {
             navigate("/about");
         } catch (err) {
             console.log("err", err.message);
+            let errMessage = "";
+            if (err.code === "auth/invalid-email") {
+                errMessage = "올바른 이메일 형식이 아닙니다.";
+            } else if (err.code === "auth/wrong-password") {
+                errMessage = "올바르지 않은 비밀번호입니다.";
+            } else if (err.code === "auth/user-not-found") {
+                errMessage = "가입되지 않은 사용자 입니다.";
+            } else if (err.code === "auth/missing-email") {
+                errMessage = "이메일이 입력되지 않았습니다.";
+            } else {
+                errMessage = "로그인이 실패하였습니다.";
+            }
+            dispatch({ type: "isError", payload: errMessage });
         }
     };
     return { error, isPending, login };
@@ -125,6 +139,17 @@ export const useSignup = () => {
             navigate("/login");
         } catch (err) {
             console.log(err);
+            let errMessage = "";
+            if (err.code == "auth/email-already-in-use") {
+                errMessage = "The email address is already in use";
+            } else if (err.code == "auth/invalid-email") {
+                errMessage = "The email address is not valid.";
+            } else if (err.code == "auth/operation-not-allowed") {
+                errMessage = "Operation not allowed.";
+            } else if (err.code == "auth/weak-password") {
+                errMessage = "The password is too weak.";
+            }
+            dispatch({ type: "isError", payload: errMessage });
         }
     };
 

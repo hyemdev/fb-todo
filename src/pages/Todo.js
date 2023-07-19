@@ -13,7 +13,6 @@ const Todo = ({ fbName, fbUid, fbEmail }) => {
 
     // 나중에 db구성에 활용한다
     // Firebase, MongDB에서는 Collection 구성에 활용한다.
-    console.log(fbName, fbEmail);
 
     // json server 데이터 state 변수
     const initTodoData = [];
