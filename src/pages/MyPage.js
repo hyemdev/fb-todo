@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 // import firebase from "../firebase";
 
 /////////////////////
-import { useAuthContext } from "../hooks/useAuthContext";
-import { useUpdateNickName } from "../hooks/useUpdateNickName";
-import { useUpdateEmail } from "../hooks/useUpdateEmail";
-import { useUpdatePass } from "../hooks/useUpdatePass";
-import { useUserDelete } from "../hooks/useUserDelete";
+import {
+    useAuthContext,
+    useUpdateNickName,
+    useUpdateEmail,
+    useUpdatePass,
+    useUserDelete,
+} from "../hooks/useFirebase";
 
 const MyPage = ({
     fbName,
@@ -80,7 +82,7 @@ const MyPage = ({
 
     const handlerPassword = async e => {
         e.preventDefault();
-        updatePass(newPass);
+        updatePass(pw);
         // try {
         //     await user.updatePassword(pw);
         //     alert("비밀번호 정보를 변경했습니다");

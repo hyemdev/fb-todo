@@ -16,7 +16,7 @@ import MyPage from "./pages/MyPage";
 import Schedule from "./pages/Schedule";
 import TodoChart from "./pages/TodoChart";
 import Upload from "./pages/Upload";
-import { useAuthContext } from "./hooks/useAuthContext";
+import { useAuthContext } from "./hooks/useFirebase";
 
 function App() {
     // 추후에 Redux/Recoil state로 관리 필요

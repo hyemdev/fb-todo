@@ -29,17 +29,14 @@ const authReducer = (state, action) => {
             return { ...state, user: action.payload }; // 추후에 immer가 들어감
         case "logout":
             return { ...state, user: null };
-
         case "isAuthReady":
             return { ...state, user: action.payload, isAuthReady: true };
 
         //----마이페이지 수정 업데이트
         case "updateName":
             return {...state, user: action.payload}
-        
         case "updateEmail":
             return {...state, user: action.payload}
-            
         case "deleteUser":
             return {...state, user: null}
 

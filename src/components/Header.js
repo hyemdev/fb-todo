@@ -1,7 +1,8 @@
+import React from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 // import firebase from "../firebase";
-import { useLogout } from "../hooks/useLogout";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useLogout, useAuthContext } from "../hooks/useFirebase";
 const Header = () => {
     // auth context의 "logout" 실행으로 상태변경
     const { logout } = useLogout();
