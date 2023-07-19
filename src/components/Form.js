@@ -30,7 +30,6 @@ const Form = ({ todoData, setTodoData, fbEmail, fbName }) => {
             author: fbName,
             email: fbEmail,
         };
-        console.log("newTodo", newTodo);
         // state에 저장한다 -> 그리고 갱신
         // todoData에 newTodo를 추가한다
 

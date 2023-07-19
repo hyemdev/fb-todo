@@ -1,3 +1,5 @@
+import React from "react";
+
 // import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import firebase from "../firebase";
@@ -10,15 +12,8 @@ const Login = () => {
     // 주소이동 시, Link, NavLink 말고 useNavigate를 이용해보자
     const navigate = useNavigate();
 
-    const onFinish = async values => {
-        console.log("Success:", values);
-
-        try {
-            await login(values.email, values.password);
-            navigate("/about");
-        } catch (error) {
-            console.log("error", error);
-        }
+    const onFinish = values => {
+        login(values.email, values.password);
 
         // try {
         //     // email과 pw로 인증 로그인

@@ -1,3 +1,5 @@
+import React from "react";
+
 import { useEffect, useReducer } from "react";
 import { createContext } from "react";
 import { appAuth } from "../firebase/config";
@@ -15,7 +17,7 @@ const AuthContext = createContext();
 //// 1. 원본(state)를 훼손하지 않고, 원하는 데이터 처리를 한 후
 //// 2. 원본(state)를 변경한다(불변성)
 const authReducer = (state, action) => {
-    console.log("리듀서함수", action); //  { type: "login", payload: user }
+    //  { type: "login", payload: user }
 
     // action은 반드시 형태가 { type: "구분자" }
     // ex. {type : "입금", payload: 1000 }
@@ -30,6 +32,16 @@ const authReducer = (state, action) => {
 
         case "isAuthReady":
             return { ...state, user: action.payload, isAuthReady: true };
+
+        //----마이페이지 수정 업데이트
+        case "updateName":
+            return {...state, user: action.payload}
+        
+        case "updateEmail":
+            return {...state, user: action.payload}
+            
+        case "deleteUser":
+            return {...state, user: null}
 
         default:
             // 그대로 돌려준다
@@ -59,7 +71,6 @@ const AuthContextProvider = ({ children }) => {
         onAuthStateChanged(appAuth, user => {
             // login 되었는지 아닌지를 파악한다.
             // AuthContext에 User정보를 입력한다.
-            console.log("~onAuthStateChanged~", user);
             dispatch({ type: "isAuthReady", payload: user });
         });
     }, []);

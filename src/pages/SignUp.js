@@ -18,12 +18,7 @@ const SignUp = () => {
     const handleSignUp = async e => {
         e.preventDefault();
 
-        try {
-            // 로그인을 시도한다.
-            signUp(email, pw, nickName);
-        } catch (error) {
-            console.log(error);
-        }
+        signUp(email, pw, nickName);
     };
 
     return (

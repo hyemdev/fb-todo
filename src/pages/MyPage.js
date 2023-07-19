@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import { MyPageDiv } from "../style/UserCss";
 import { useNavigate } from "react-router-dom";
-import firebase from "../firebase";
-// firebase 연동
+// import firebase from "../firebase";
+
+/////////////////////
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useUpdateNickName } from "../hooks/useUpdateNickName";
+import { useUpdateEmail } from "../hooks/useUpdateEmail";
+import { useUpdatePass } from "../hooks/useUpdatePass";
+import { useUserDelete } from "../hooks/useUserDelete";
 
 const MyPage = ({
     fbName,
@@ -12,76 +18,96 @@ const MyPage = ({
     setFBName,
     setFBUid,
 }) => {
+    //////////
+    const { user } = useAuthContext();
+    const { updateNickName } = useUpdateNickName();
+    const { updateMail } = useUpdateEmail();
+    const { updatePass } = useUpdatePass();
+    const { userDelete } = useUserDelete();
+
     const navigate = useNavigate();
     const [nickName, setNickName] = useState(fbName);
     const [email, setEmail] = useState(fbEmail);
     const [pw, setPW] = useState("");
     const [pwConfirm, setPwConfirm] = useState("");
 
+    ////////////
+    // authcontext에 state의 user를 출력
+    useEffect(() => {
+        setNickName(user.displayName);
+        setEmail(user.email);
+    }, []);
+
     //fb의 사용자 정보 객체
-    const user = firebase.auth().currentUser;
+    // const user = firebase.auth().currentUser;
 
     const handlerNickName = async e => {
         e.preventDefault();
-        try {
-            await user.updateProfile({
-                displayName: nickName,
-            });
-            setFBName(nickName);
-            setNickName(nickName)
-            alert("닉네임 정보를 변경했습니다");
-        } catch (error) {
-            console.log(error.code);
-        }
-
-        console.log("프로필업뎃");
+        /////////////////
+        updateNickName(nickName);
+        // try {
+        //   await user.updateProfile({
+        //     displayName: nickName,
+        //   });
+        //   setFBName(nickName);
+        //   setNickName(nickName);
+        //   alert("닉네임 정보를 변경하였습니다.");
+        // } catch (error) {
+        //   console.log(error.code);
+        // }
     };
+
+    ///////
     const handlerEmail = async e => {
         e.preventDefault();
-        try {
-            await user.updateEmail(email);
-            console.log("이메일업뎃");
-            setFBEmail(email);
-            setEmail(email)
-            alert("이메일 정보를 변경했습니다");
-        } catch (error) {
-            if (error.code == "auth/email-already-in-use") {
-                alert("The email address is already in use");
-            } else if (error.code == "auth/invalid-email") {
-                alert("The email address is not valid.");
-            } else {
-                alert("이메일을 확인 해주세요.");
-            }
-        }
+        updateMail(email);
+
+        // try {
+        //   await user.updateEmail(email);
+        //   setFBEmail(email);
+        //   setEmail(email);
+        //   alert("이메일 정보를 변경하였습니다.");
+        // } catch (error) {
+        //   if (error.code == "auth/email-already-in-use") {
+        //     alert("The email address is already in use");
+        //   } else if (error.code == "auth/invalid-email") {
+        //     alert("The email address is not valid.");
+        //   } else {
+        //     alert("이메일을 확인해 주세요.");
+        //   }
+        // }
     };
+
     const handlerPassword = async e => {
         e.preventDefault();
-        try {
-            await user.updatePassword(pw);
-            alert("비밀번호 정보를 변경했습니다");
-        } catch (error) {
-            if (error.code == "auth/weak-password") {
-                alert("The password is too weak.");
-            } else {
-                alert("비밀번호 다시 입력 해주세요.");
-            }
-        }
+        updatePass(newPass);
+        // try {
+        //     await user.updatePassword(pw);
+        //     alert("비밀번호 정보를 변경했습니다");
+        // } catch (error) {
+        //     if (error.code == "auth/weak-password") {
+        //         alert("The password is too weak.");
+        //     } else {
+        //         alert("비밀번호 다시 입력 해주세요.");
+        //     }
+        // }
         console.log("패스워드업뎃");
     };
     const handlerDelete = async e => {
         e.preventDefault();
-        try {
-            await user.delete();
-            console.log("회원탈퇴");
-            alert("탈퇴가 정상적으로 처리되었습니다");
-            // firebase.auth().signOut();
-            setFBEmail("");
-            setFBName("");
-            setFBUid("");
-            navigate("/");
-        } catch (error) {
-            console.log(error.code);
-        }
+        userDelete();
+        // try {
+        //     await user.delete();
+        //     console.log("회원탈퇴");
+        //     alert("탈퇴가 정상적으로 처리되었습니다");
+        //     // firebase.auth().signOut();
+        //     setFBEmail("");
+        //     setFBName("");
+        //     setFBUid("");
+        //     navigate("/");
+        // } catch (error) {
+        //     console.log(error.code);
+        // }
     };
 
     useEffect(() => {
@@ -94,7 +120,6 @@ const MyPage = ({
         <div className="p-6 mt-5 shadow-sm rounded-lg bg-slate-50">
             <h2>MY PAGE</h2>
 
-            
             {/* 1. emotion을 이용하여 tag의 용도를 구분한다
           2. css도 함께 적용한다. */}
             <MyPageDiv>

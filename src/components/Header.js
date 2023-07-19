@@ -8,7 +8,6 @@ const Header = () => {
 
     // {user, dispatch}중에 user만 받아옴
     const { user } = useAuthContext();
-    console.log("===========header-user", user);
 
     const navigator = useNavigate();
 

@@ -1,3 +1,5 @@
+import React from "react";
+
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +36,6 @@ export const useSignup = () => {
                 pw,
             );
             const user = userCredential.user;
-            console.log(user);
             if (!user) {
                 // 에러 객체를 던진다.
                 console.log("회원 가입에 실패하였습니다.");
@@ -46,7 +47,6 @@ export const useSignup = () => {
             });
             // 프로필 업데이트 성공, authContext 업데이트
             //// dispatch({action}) action에 type, payload를 담아서 보낸다.
-            console.log("dispatch실행=================");
             dispatch({ type: "login", payload: user });
 
             //// 에러 없음

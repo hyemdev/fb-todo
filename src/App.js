@@ -1,4 +1,5 @@
 import "./App.css";
+import React from "react";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -66,12 +67,12 @@ function App() {
                                 element={
                                     user ? (
                                         <MyPage
-                                            fbName={fbName}
-                                            fbUid={fbUid}
-                                            fbEmail={fbEmail}
-                                            setFBName={setFBName}
-                                            setFBEmail={setFBEmail}
-                                            setFBUid={setFBUid}
+                                        // fbName={fbName}
+                                        // fbUid={fbUid}
+                                        // fbEmail={fbEmail}
+                                        // setFBName={setFBName}
+                                        // setFBEmail={setFBEmail}
+                                        // setFBUid={setFBUid}
                                         />
                                     ) : (
                                         <Navigate to="/login" />

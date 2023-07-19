@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { patchTitleTodo, patchCompleteTodo, deleteTodo } from "../axios/axios";
 
 const ListItem = ({ item, todoData, setTodoData }) => {
-    console.log("ListItem 랜더링", item);
 
     // 편집상태 설정 state
     const [isEdit, setIsEdit] = useState(false);
@@ -38,7 +37,6 @@ const ListItem = ({ item, todoData, setTodoData }) => {
 
     // 수정버튼 활성화 하기
     const handleEditClick = _id => {
-        console.log("_id", _id);
         setIsEdit(true);
     };
 
@@ -54,7 +52,6 @@ const ListItem = ({ item, todoData, setTodoData }) => {
 ///////////////////////////////////////////////
     // 수정 저장하기
     const handleSaveClick = _id => {
-        console.log(_id);
         let newTodoData = todoData.map(item => {
             if (item.id === _id) {
                 item.title = editTitle;
@@ -65,7 +62,6 @@ const ListItem = ({ item, todoData, setTodoData }) => {
         setTodoData(newTodoData);
 
         //axios patch/put 호출 fbtodolist 자료수정하기
-        console.log(_id, editTitle);
 
         patchTitleTodo(_id, editTitle);
         setIsEdit(false);

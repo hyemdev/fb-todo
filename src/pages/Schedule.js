@@ -46,7 +46,6 @@ const Schedule = ({ fbName, fbUid, fbEmail, todoData, setTodoData }) => {
     const handleClickDay = (value, event) => {
         // alert(moment(value).format("YYYY-MM-DD"));
         showModal();
-        console.log(event.currentTarget); // current target안에 div가 있더라.(정보를 포함하고 있다는 것)
         // console.log(event.currentTarget.querySelector("div").dataset.gogo);
         //data-name으로 지정한 데이터는 dataset으로 캐치할 수 있다
         const div = event.currentTarget.querySelector("div");

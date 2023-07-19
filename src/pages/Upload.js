@@ -1,3 +1,5 @@
+import React from "react";
+
 import axios from "axios";
 import { useState } from "react";
 
@@ -118,7 +120,6 @@ const UploadPreview = () => {
                         "Content-Type": "multipart/form-data",
                     },
                 });
-                console.log("전송완료", res);
 
                 //서버가 정상적으로 업데이트 되고나서 url줄때
                 const serverStatus = res.status.toString();
@@ -234,7 +235,6 @@ const UploadAxios = () => {
                         "Content-Type": "multipart/form-data",
                     },
                 });
-                console.log("전송완료", res);
 
                 //서버가 정상적으로 업데이트 되고나서 url줄때
                 const serverStatus = res.status.toString();
@@ -355,7 +355,6 @@ const UploadJson = () => {
     const handleSubmit = async event => {
         // form에서 submit이 발생하면 웹브라우저가 갱신한다(막아줘야함)
         event.preventDefault();
-        console.log("확인클릭");
         // 필수항목을 체크한다 (기획서상 문제)
         // : 이미지 파일이 있는지 (이미지가 없으면 경고창띄움)
         if (!previewImage) {
@@ -386,7 +385,6 @@ const UploadJson = () => {
                     "Content-Type": "multipart/form-data",
                 },
             });
-            console.log(res);
         } catch (error) {
             console.log(error);
         }
