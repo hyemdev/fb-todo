@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import List from "../components/List";
 import Form from "../components/Form";
-import { useNavigate } from "react-router-dom";
-import { getTodo, deleteAllTodo } from "../axios/axios";
 import Loading from "../components/Loading";
+import { getTodo, deleteAllTodo } from "../axios/axios";
+import { useAuthContext } from "../hooks/useFirebase";
+import { useCollection } from "../hooks/useCollection";
 
 const Todo = ({ fbName, fbUid, fbEmail }) => {
-    const Navigator = useNavigate();
+    // collection data를 출력할 state
+    // useCollection("폴더명",["조건"]);
+    
+    // 사용자별 등록을 위해 user를 참조한다.
+    const { user } = useAuthContext();
+    const { documents, error } = useCollection("todo", ["uid", "==", user.uid]);
+
+    const navigator = useNavigate();
     // 로딩처리
     const [isLoading, setIsLoading] = useState(true);
 
@@ -22,13 +31,6 @@ const Todo = ({ fbName, fbUid, fbEmail }) => {
         setTodoData([]);
         deleteAllTodo();
     };
-
-    //uid없는 경우 로그인으로 바로 보내기
-    useEffect(() => {
-        // if (!fbUid) {
-        //     Navigator("/login");
-        // }
-    }, []);
 
     //axios get호출 fbtodolist 자료 받기
     useEffect(() => {
@@ -53,13 +55,14 @@ const Todo = ({ fbName, fbUid, fbEmail }) => {
                         </button>
                     </div>
                     {/* 할일메인 */}
-                    <List todoData={todoData} setTodoData={setTodoData} />
+                    {error && <strong>{error}</strong>}
+                    {documents && <List todoData={documents} />}
+                    {/* <List todoData={todoData} setTodoData={setTodoData} /> */}
                     {/* 할일추가 */}
                     <Form
                         todoData={todoData}
                         setTodoData={setTodoData}
-                        fbName={fbName}
-                        fbEmail={fbEmail}
+                        uid={user.uid}
                     />
                 </div>
             </div>

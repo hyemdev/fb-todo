@@ -7,8 +7,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 // 데이터 베이스
-import { getFirestore } from "firebase/firestore";
-
+import { Timestamp, getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -19,8 +18,7 @@ const firebaseConfig = {
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
     appId: process.env.REACT_APP_APP_ID,
-  };
-  
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -31,5 +29,8 @@ const appAuth = getAuth(app);
 // 데이터 베이스
 const appFireStore = getFirestore(app);
 
+// 날짜를 추가할때 firebase server시간 기준으로 하자.
+const timestamp = Timestamp;
+
 // 외부에서 활용가능하도록 export한다,
-export {appAuth, appFireStore};
+export { appAuth, appFireStore,timestamp };

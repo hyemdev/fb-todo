@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { patchTitleTodo, patchCompleteTodo, deleteTodo } from "../axios/axios";
-
-const ListItem = ({ item, todoData, setTodoData }) => {
+// import { patchTitleTodo, patchCompleteTodo, deleteTodo } from "../axios/axios";
+import { useFireStore } from "../hooks/useFireStore";
+const ListItem = ({ item }) => {
+    const { deleteDocument, updateCompletedDocument } = useFireStore("todo");
 
     // 편집상태 설정 state
     const [isEdit, setIsEdit] = useState(false);
@@ -15,23 +16,21 @@ const ListItem = ({ item, todoData, setTodoData }) => {
             textDecoration: _completed ? "line-through" : "none",
         };
     };
-    
-//////////////////////////////////////
+
+    //////////////////////////////////////
     // 삭제창 만들기
     const handleDeleteClick = _id => {
+        deleteDocument(_id);
         // 전달된 id를 검색해서 목록에서 제거
         // 1.전달된 id로 해당하는 목록을 찾아서 제외하고 새로운 목록으로 갱신(화면 리랜더링)
         // 2.배열의 고차함수 중 filter를 사용하자(결과가 참인 값만 담아서 새로운 배열은 만든다.)
-        const newTodoData = todoData.filter(item => item.id !== _id);
-        setTodoData(newTodoData);
-
+        // const newTodoData = todoData.filter(item => item.id !== _id);
+        // setTodoData(newTodoData);
         //로컬 스토리지 저장
         // localStorage.setItem("fbTodoData", JSON.stringify(newTodoData));
-
-        deleteTodo(_id);
+        // deleteTodo(_id);
     };
-////////////////////////////////////////////////
-
+    ////////////////////////////////////////////////
 
     //async,await & axios 사용하기
 
@@ -49,45 +48,45 @@ const ListItem = ({ item, todoData, setTodoData }) => {
     const handleCancelClick = () => {
         setIsEdit(false);
     };
-///////////////////////////////////////////////
+    ///////////////////////////////////////////////
     // 수정 저장하기
     const handleSaveClick = _id => {
-        let newTodoData = todoData.map(item => {
-            if (item.id === _id) {
-                item.title = editTitle;
-                item.completed = false;
-            }
-            return item;
-        });
-        setTodoData(newTodoData);
+        // let newTodoData = todoData.map(item => {
+        //     if (item.id === _id) {
+        //         item.title = editTitle;
+        //         item.completed = false;
+        //     }
+        //     return item;
+        // });
+        // setTodoData(newTodoData);
 
         //axios patch/put 호출 fbtodolist 자료수정하기
 
-        patchTitleTodo(_id, editTitle);
+        // patchTitleTodo(_id, editTitle);
+
         setIsEdit(false);
     };
-////////////////////////////////////////////////////
-
+    ////////////////////////////////////////////////////
 
     //completed:true/false 수정하기
     const handleCompleteChange = _id => {
+        updateCompletedDocument(_id, !item.completed);
+
         // 중요한 것은 id에 해당하는 것만 수정하면 되는것이 아니다
         // state는 항상 새롭게 만든 내용. 즉, 배열로 업데이트 해야한다.
         // 새로운 배열을 만들어서 set 하자!
-        let newTodoData = todoData.map(item => {
-            if (item.id === _id) {
-                // completed를 갱신
-                item.completed = !item.completed;
-            }
-            return item;
-        });
-        setTodoData(newTodoData);
-
+        // let newTodoData = todoData.map(item => {
+        //     if (item.id === _id) {
+        //         // completed를 갱신
+        //         item.completed = !item.completed;
+        //     }
+        //     return item;
+        // });
+        // setTodoData(newTodoData);
         //로컬 스토리지 저장
         // localStorage.setItem("fbTodoData", JSON.stringify(newTodoData));
-
         //axios patch/put 호출 fbtodolist 자료수정하기
-        patchCompleteTodo(_id, { ...item });
+        // patchCompleteTodo(_id, { ...item });
     };
 
     if (isEdit) {

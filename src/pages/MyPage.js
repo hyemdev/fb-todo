@@ -137,7 +137,7 @@ const MyPage = ({
                             maxLength={10}
                         />
                         <button
-                            className="border rounded-md px-7 py-4 shadow"
+                            className="border rounded-md px-7 shadow"
                             onClick={handlerNickName}
                         >
                             닉네임 변경
@@ -152,7 +152,7 @@ const MyPage = ({
                             onChange={e => setEmail(e.target.value)}
                         />
                         <button
-                            className="border rounded-md px-7 py-2 shadow"
+                            className="border rounded-md px-7 shadow"
                             onClick={handlerEmail}
                         >
                             이메일 변경
@@ -178,7 +178,7 @@ const MyPage = ({
                             maxLength={16}
                         />
                         <button
-                            className="border rounded-md px-7 py-2 shadow"
+                            className="border rounded-md px-7 shadow"
                             onClick={handlerPassword}
                         >
                             비밀번호 변경
@@ -186,7 +186,7 @@ const MyPage = ({
                     </div>
                     <div className="btn-list">
                         <button
-                            className="border rounded-md px-7 py-2 shadow"
+                            className="border rounded-md px-7 shadow"
                             onClick={handlerDelete}
                         >
                             회원탈퇴

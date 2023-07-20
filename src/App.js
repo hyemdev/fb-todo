@@ -1,5 +1,5 @@
 import "./App.css";
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -17,7 +17,7 @@ import TodoChart from "./pages/TodoChart";
 import Upload from "./pages/Upload";
 
 import { useAuthContext } from "./hooks/useFirebase";
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 
 function App() {
     // 추후에 Redux/Recoil state로 관리 필요
@@ -27,15 +27,24 @@ function App() {
     const { isAuthReady, user, errMessage, dispatch } = useAuthContext();
 
     //에러메시지 모달 관련
-    const [isModalOpen, setIsModalOpen] = useState(true);
-
+    const error = msg => {
+        Modal.error({
+            title: "firebase warning",
+            content: msg,
+            onOk: handleOk,
+        });
+    };
+    
+    // useEffect(() => {
+    //     if (errMessage !== "") {
+    //         error(errMessage);
+    //     }
+    // }, [errMessage]);
+    
     const handleOk = () => {
         dispatch({ type: "isError", payload: "" });
     };
-    // const handleCancel = () => {
-    //     dispatch({ type: "isError", payload: "" });
-    // };
-
+    
     return (
         <>
             {isAuthReady ? (
@@ -93,17 +102,6 @@ function App() {
                             />
                         </Routes>
                     </div>
-                    {/* 모달창 */}
-                    {errMessage && (
-                        <Modal
-                            title="Basic Modal"
-                            open={isModalOpen}
-                            onOk={handleOk}
-                            // onCancel={handleCancel}
-                        >
-                            <p>{errMessage}</p>
-                        </Modal>
-                    )}
                 </div>
             ) : (
                 " Loading ... "
@@ -111,5 +109,4 @@ function App() {
         </>
     );
 }
-
 export default App;
