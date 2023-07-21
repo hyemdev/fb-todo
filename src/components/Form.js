@@ -1,10 +1,9 @@
 import React from "react";
 
 import { useState } from "react";
-import { postTodo } from "../axios/axios";
 import { useFireStore } from "../hooks/useFireStore";
 
-const Form = ({ todoData, setTodoData, uid }) => {
+const Form = ({ uid }) => {
     // fb store의 collection참조를 활용 , useFireStore("컬렉션이름")
     const { addDocument, response } = useFireStore("todo");
 

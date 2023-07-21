@@ -2,7 +2,8 @@ import React, { useState } from "react";
 // import { patchTitleTodo, patchCompleteTodo, deleteTodo } from "../axios/axios";
 import { useFireStore } from "../hooks/useFireStore";
 const ListItem = ({ item }) => {
-    const { deleteDocument, updateCompletedDocument } = useFireStore("todo");
+    const { deleteDocument, updateCompletedDocument, updateTitleDocument } =
+        useFireStore("todo");
 
     // 편집상태 설정 state
     const [isEdit, setIsEdit] = useState(false);
@@ -51,6 +52,7 @@ const ListItem = ({ item }) => {
     ///////////////////////////////////////////////
     // 수정 저장하기
     const handleSaveClick = _id => {
+        updateTitleDocument(_id, editTitle);
         // let newTodoData = todoData.map(item => {
         //     if (item.id === _id) {
         //         item.title = editTitle;
@@ -70,6 +72,8 @@ const ListItem = ({ item }) => {
 
     //completed:true/false 수정하기
     const handleCompleteChange = _id => {
+        //FB의 firestore에서 id를 참조 전달
+        //FB의 firestore에서 completed 를 반대로 !(Not연산자)
         updateCompletedDocument(_id, !item.completed);
 
         // 중요한 것은 id에 해당하는 것만 수정하면 되는것이 아니다

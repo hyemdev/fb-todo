@@ -36,13 +36,8 @@ const storeReducer = (state, action) => {
                 success: true,
             };
         case "deleteDoc":
-            return {
-                isPending: false,
-                document: action.payload,
-                error: null,
-                success: true,
-            };
         case "updateCompleted":
+        case "updateTitleDoc":
             return {
                 isPending: false,
                 document: action.payload,
@@ -99,6 +94,9 @@ export const useFireStore = transaction => {
     const updateCompletedDocument = async (id, flag) => {
         dispatch({ type: "isPending" });
         try {
+            // FB의 doc 메서드는 1개의 document를 선택한다.
+            // doc(todo컬렉션:폴더 참조, id)
+            // updateDoc( 문서, { 키 : 값 })
             const docRef = await updateDoc(doc(colRef, id), {
                 completed: flag,
             });
@@ -108,6 +106,23 @@ export const useFireStore = transaction => {
         }
     };
 
+    // todo title update
+    const updateTitleDocument = async (id, title) => {
+        dispatch({ type: "isPending" });
+        try {
+            const docRef = await updateDoc(doc(colRef, id), { title });
+            dispatch({ type: "updateTitleDoc", payload: docRef });
+        } catch (err) {
+            console.log(err.message);
+        }
+    };
+
     // 외부 호출
-    return { addDocument, deleteDocument, updateCompletedDocument, response };
+    return {
+        addDocument,
+        deleteDocument,
+        updateCompletedDocument,
+        updateTitleDocument,
+        response,
+    };
 };
